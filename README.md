@@ -1,3 +1,5 @@
+Traduction amateur en français du format VAACT
+
 # VAACT "Very Accurate Anime Character Tournament"
 VAACT est une méta alternative conçue pour simuler au mieux possible les duels dans l'animé Yu-Gi-Oh, le tout en équilibrant au mieux les différents decks des personnages. 
 
