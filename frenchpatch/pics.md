@@ -1,3 +1,8 @@
-Images hd français
+patch français pour le format VAACT
 
-le lien sera remis un jour ou pas j'y bosse ok
+cdb
+fini ? (à vérifier et relire) : Yami Yugi, Set Kaiba, Revolver
+pas fait : le reste
+
+images
+seto kaiba, revolver : fait (à vérifier)
