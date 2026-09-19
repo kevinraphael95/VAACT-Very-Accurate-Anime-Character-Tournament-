@@ -66,3 +66,26 @@ Dans le même terminal, tape :
 ```cmd
 docker-compose down
 ```
+
+
+
+
+
+***
+
+
+Ouvre un terminal et tape juste ça, une ligne à la fois :
+
+1. Télécharge l'image :
+
+docker pull dyxel/multirole:latest
+
+2. Une fois terminé, lance le serveur :
+
+docker run -d --name multirole -p 7922:7922 -p 7911:7911 -p 34343:34343 -p 62672:62672 -p 49382:49382 -p 43632:43632 dyxel/multirole:latest
+
+3. Vérifie que ça tourne bien :
+
+docker logs -f multirole
+
+Colle-moi ce qui s'affiche si tu vois une erreur, sinon connecte-toi dans EDOPro sur 127.0.0.1 port 7922.
