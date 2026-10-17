@@ -11,6 +11,7 @@ function s.initial_effect(c)
 	e_add:SetValue(82137211)
 	c:RegisterEffect(e_add)
 
+	-- Activation
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
@@ -54,9 +55,17 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	if #mg == 0 or #ex == 0 then return end
 	
 	local fc = ex:GetFirst()
-	local mat = mg:Filter(function(c) return true end)
+	
+	-- Correction : On utilise une fonction anonyme qui accepte les 3 paramètres (c, e, tp)
+	-- pour éviter l'erreur "3 parameters are needed"
+	local mat = mg:Filter(function(c, e, tp) return true end, nil, tp)
 	
 	if fc and mat then
+		-- On envoie les matériaux au Cimetière
+		Duel.SendtoGrave(mat, REASON_MATERIAL+REASON_FUSION)
+		
+		-- On invoque la Fusion
 		Duel.SpecialSummon(fc, SUMMON_TYPE_FUSION, tp, tp, true, false, POS_FACEUP)
+		fc:CompleteProcedure()
 	end
 end
