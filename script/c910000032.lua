@@ -1,8 +1,7 @@
---陽炎獣 サーベラス
---Hazy Flame Cerbereus
+--[VAACT] Chevalier du valet
 local s,id=GetID()
 function s.initial_effect(c)
-	--summon
+	--Invocation Normale sans Sacrifice
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
@@ -17,7 +16,7 @@ function s.ntcon(e,c,minc)
 	return minc==0 and c:GetLevel()>4 and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
 end
 function s.ntop(e,tp,eg,ep,ev,re,r,rp,c)
-	--change base attack
+	--ATK de base : 1800
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
@@ -26,4 +25,9 @@ function s.ntop(e,tp,eg,ep,ev,re,r,rp,c)
 	e1:SetCode(EFFECT_SET_BASE_ATTACK)
 	e1:SetValue(1800)
 	c:RegisterEffect(e1)
+	--Niveau : 4
+	local e2=e1:Clone()
+	e2:SetCode(EFFECT_CHANGE_LEVEL)
+	e2:SetValue(4)
+	c:RegisterEffect(e2)
 end

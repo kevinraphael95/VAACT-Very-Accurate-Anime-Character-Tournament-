@@ -1,4 +1,4 @@
---[VAACT] Dragon Saint - Le Dieu d'Osiris (Saint Dragon - The God of Osiris)
+--[VAACT] Slifer
 local s,id=GetID()
 function s.initial_effect(c)
 	--Nécessite 3 Sacrifices pour être Invoqué Normalement ou Posé
