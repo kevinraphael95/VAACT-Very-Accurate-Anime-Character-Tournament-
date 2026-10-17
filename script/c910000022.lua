@@ -1,68 +1,100 @@
---ティンクル・ファイブスター (Anime)
---Five Star Twilight (Anime)
+--[VAACT] Multiplicateur (Multiply)
 local s,id=GetID()
+
+--ID du "Jeton Copie" : à modifier ici si besoin
+s.jeton=910001145
+
 function s.initial_effect(c)
-	--Activate
+	--Activation
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOKEN)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCost(s.cost)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
+	--Règle : ne doit pas être dans le Main Deck au début du Duel
+	if not s.global_check then
+		s.global_check=true
+		local ge1=Effect.GlobalEffect()
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_STARTUP)
+		ge1:SetOperation(s.startop)
+		Duel.RegisterEffect(ge1,0)
+	end
 end
-s.listed_names={910000024,910000025,910000026,910000027,910000028}
-function s.cfilter(c,ft,tp)
-	return c:IsLevel(5) and (ft>4 or (c:IsControler(tp) and c:GetSequence()<5)) and (c:IsControler(tp) or c:IsFaceup())
+function s.startop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(Card.IsOriginalCode,0,LOCATION_DECK,LOCATION_DECK,nil,id)
+	if #g>0 then
+		Duel.Exile(g,REASON_RULE)
+	end
 end
-function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	e:SetLabel(1)
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	if chk==0 then return ft>3 and Duel.CheckReleaseGroupCost(tp,s.cfilter,1,false,nil,nil,ft,tp) end
-	local rg=Duel.SelectReleaseGroupCost(tp,s.cfilter,1,1,false,nil,nil,ft,tp)
-	Duel.Release(rg,REASON_COST)
+
+--Monstre face recto avec 500 ATK ou moins, copiable en Jeton
+function s.filter(c,tp)
+	return c:IsFaceup() and c:IsAttackBelow(500)
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,s.jeton,nil,TYPES_TOKEN,
+			c:GetAttack(),c:GetDefense(),c:GetLevel(),c:GetRace(),c:GetAttribute())
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		if e:GetLabel()==0 and Duel.GetLocationCount(tp,LOCATION_MZONE)<=4 then return false end
-		e:SetLabel(0)
-		return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) 
+		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+			and Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_MZONE,0,1,nil,tp)
 	end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,5,tp,LOCATION_DECK|LOCATION_HAND)
+	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,0)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=4 or Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then return end
-	local g1=Duel.CreateToken(tp,910000024)
-	local g2=Duel.CreateToken(tp,910000025)
-	local g3=Duel.CreateToken(tp,910000026)
-	local g4=Duel.CreateToken(tp,910000027)
-	local g5=Duel.CreateToken(tp,910000028)
-	if #g1>0 and #g2>0 and #g3>0 and #g4>0 and #g5>0 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg1=g1:Select(tp,1,1,nil)
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg2=g2:Select(tp,1,1,nil)
-		sg1:Merge(sg2)
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg3=g3:Select(tp,1,1,nil)
-		sg1:Merge(sg3)
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg4=g4:Select(tp,1,1,nil)
-		sg1:Merge(sg4)
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg5=g5:Select(tp,1,1,nil)
-		sg1:Merge(sg5)
-		local tc=sg1:GetFirst()
-		for tc in aux.Next(sg1) do
-			Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP)
-			local e1=Effect.CreateEffect(e:GetHandler())
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetCode(EFFECT_UNRELEASABLE_SUM)
-			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-			e1:SetValue(1)
-			tc:RegisterEffect(e1,true)
-		end
-		Duel.SpecialSummonComplete()
+	local c=e:GetHandler()
+	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	if ft<=0 then return end
+	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then ft=1 end
+	--Choisir le monstre à copier
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+	local mc=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_MZONE,0,1,1,nil,tp):GetFirst()
+	if not mc then return end
+	--Choisir combien de Jetons (autant que vous voulez)
+	local n=ft
+	if ft>1 then
+		n=Duel.AnnounceNumberRange(tp,1,ft)
 	end
+	--Caractéristiques copiées
+	local code=mc:GetOriginalCode()
+	local race,att=mc:GetRace(),mc:GetAttribute()
+	local atk,def=mc:GetAttack(),mc:GetDefense()
+	local pos=mc:GetPosition()
+	for i=1,n do
+		local tc=Duel.CreateToken(tp,s.jeton)
+		if Duel.SpecialSummonStep(tc,0,tp,tp,false,false,pos) then
+			--Même Nom
+			local e1=Effect.CreateEffect(c)
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetCode(EFFECT_CHANGE_CODE)
+			e1:SetValue(code)
+			e1:SetReset(RESET_EVENT|RESETS_STANDARD)
+			tc:RegisterEffect(e1)
+			--Même Type
+			local e2=e1:Clone()
+			e2:SetCode(EFFECT_CHANGE_RACE)
+			e2:SetValue(race)
+			tc:RegisterEffect(e2)
+			--Même Attribut
+			local e3=e1:Clone()
+			e3:SetCode(EFFECT_CHANGE_ATTRIBUTE)
+			e3:SetValue(att)
+			tc:RegisterEffect(e3)
+			--Même ATK/DEF
+			local e4=e1:Clone()
+			e4:SetCode(EFFECT_SET_BASE_ATTACK)
+			e4:SetValue(atk)
+			tc:RegisterEffect(e4)
+			local e5=e1:Clone()
+			e5:SetCode(EFFECT_SET_BASE_DEFENSE)
+			e5:SetValue(def)
+			tc:RegisterEffect(e5)
+			--Mêmes effets (s'il en a)
+			tc:CopyEffect(code,RESET_EVENT|RESETS_STANDARD)
+		end
+	end
+	Duel.SpecialSummonComplete()
 end
