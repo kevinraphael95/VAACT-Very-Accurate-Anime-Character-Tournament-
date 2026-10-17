@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	e_add:SetValue(OFFICIAL_ID)
 	c:RegisterEffect(e_add)
 
-	-- Activation de la carte (Invoquer par Fusion)
+	-- Activation de la carte
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
@@ -27,11 +27,6 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
-end
-
--- Filtre pour les matériaux de Fusion
-function s.filter(c,e,tp)
-	return c:IsType(TYPE_MONSTER) and c:IsCanBeFusionMaterial() and not c:IsImmuneToEffect(e)
 end
 
 -- Vérifie si tu contrôles un Chevalier
@@ -43,48 +38,33 @@ end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		-- On vérifie qu'on a au moins 1 monstre en main/terrain et 1 Fusion possible dans l'Extra Deck
-		local mg_main = Duel.GetMatchingGroup(s.filter, tp, LOCATION_HAND+LOCATION_MZONE, 0, nil, e, tp)
+		-- On vérifie qu'il y a de quoi faire une fusion
+		local mg_main = Duel.GetMatchingGroup(nil, tp, LOCATION_HAND+LOCATION_MZONE, 0, nil)
+		local can_fuse = Duel.IsExistingMatchingCard(aux.TRUE, tp, LOCATION_EXTRA, 0, 1, nil)
 		
-		-- Si on a un chevalier, on peut aussi chercher dans le Deck
+		if not can_fuse then return false end
+		
+		-- Si on a un chevalier, on peut piocher dans le Deck
 		if s.hasKnight(tp) then
-			local mg_deck = Duel.GetMatchingGroup(s.filter, tp, LOCATION_DECK, 0, nil, e, tp)
-			if #mg_deck > 0 then
-				return Duel.IsExistingMatchingCard(aux.TRUE, tp, LOCATION_EXTRA, 0, 1, nil) and #mg_main > 0
-			end
+			return true -- Le jeu fera les vérifications précises lors de la sélection
 		end
 		
-		return Duel.IsExistingMatchingCard(aux.TRUE, tp, LOCATION_EXTRA, 0, 1, nil) and #mg_main > 0
+		return #mg_main > 0
 	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON, nil, 1, tp, LOCATION_EXTRA)
 	Duel.SetOperationInfo(0,CATEGORY_FUSION_SUMMON, nil, 0, 0, 0)
 end
 
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	-- On utilise la fonction native du jeu pour l'Invocation Fusion
-	-- Elle va automatiquement ouvrir les fenêtres de sélection pour les matériaux
-	-- et vérifier si tu as le droit d'utiliser le Deck (selon tes règles de script)
-	local mg = Duel.GetMatchingGroup(s.filter, tp, LOCATION_HAND+LOCATION_MZONE, 0, nil, e, tp)
+	-- On laisse EDOPro gérer entièrement la sélection de la Fusion et des matériaux
+	local fc = Duel.GetFusionMaterial(tp)
 	
-	-- Si tu as un chevalier, on autorise les matériaux depuis le Deck
+	-- On ajoute le Deck aux matériaux disponibles si tu contrôles un Chevalier
 	if s.hasKnight(tp) then
-		mg:Merge(Duel.GetMatchingGroup(s.filter, tp, LOCATION_DECK, 0, nil, e, tp))
+		fc:Merge(Duel.GetMatchingGroup(Card.IsCanBeFusionMaterial, tp, LOCATION_DECK, 0, nil))
 	end
 	
-	local ex = Duel.GetMatchingGroup(aux.TRUE, tp, LOCATION_EXTRA, 0, nil)
-	
-	if #mg == 0 or #ex == 0 then return end
-	
-	-- On laisse le jeu gérer l'invocation de la Fusion
-	Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_SPSUMMON)
-	local fus = ex:Select(tp, 1, 1, nil):GetFirst()
-	
-	if fus then
-		-- Envoi des matériaux au cimetière (nécessaire pour l'invocation)
-		-- Note : Le jeu va normalement filtrer les matériaux valides pour la Fusion choisie
-		Duel.SendtoGrave(mg, REASON_MATERIAL+REASON_FUSION)
-		-- Invocation de la Fusion
-		Duel.SpecialSummon(fus, SUMMON_TYPE_FUSION, tp, tp, true, false, POS_FACEUP)
-		fus:CompleteProcedure()
-	end
+	-- On lance l'invocation par Fusion standard du jeu
+	-- Le "true" à la fin autorise l'utilisation des matériaux du Deck
+	Fusion.SummonEffOP(e,tp,eg,ep,ev,re,r,rp,fc,true)
 end
