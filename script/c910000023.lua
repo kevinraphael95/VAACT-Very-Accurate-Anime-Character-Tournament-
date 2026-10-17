@@ -51,7 +51,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	if #g==0 or Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then return end
 	--Sacrifier tous les monstres que vous contrôlez
 	if Duel.Release(g,REASON_EFFECT)==0 then return end
-	Duel.AdjustAll()
+	Duel.AdjustInstantly()
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<#s.monstres then return end
 	--Invoquer Spécialement les monstres depuis l'extérieur du Duel
 	for _,m in ipairs(s.monstres) do
