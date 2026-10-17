@@ -53,9 +53,14 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetCode(EFFECT_ADD_EXTRA_TRIBUTE)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetTargetRange(LOCATION_MZONE, 0) -- Dans les zones monstres
-		e1:SetTarget(function(e, c) return c == tc end) -- Uniquement pour cette cible
+		e1:SetTarget(s.tgtg) -- Utilisation d'une fonction dédiée
 		e1:SetValue(POS_FACEUP)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		tc:RegisterEffect(e1)
 	end
+end
+
+function s.tgtg(e, c)
+    -- Autorise le sacrifice si la carte est la cible de l'effet
+	return c == e:GetHandler()
 end
