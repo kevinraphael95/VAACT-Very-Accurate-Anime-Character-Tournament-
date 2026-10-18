@@ -1,14 +1,13 @@
 --[VAACT] [PRE_ERRATA] Magicien Noir du Chaos (Dark Magician of Chaos)
 local s,id=GetID()
 function s.initial_effect(c)
-	-- Traité comme Dark Magician of Chaos officiel (ID 40737112)
+	--Traité comme Dark Magician of Chaos officiel (ID 40737112)
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
 	e0:SetCode(EFFECT_ADD_CODE)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e0:SetValue(40737112)
 	c:RegisterEffect(e0)
-
 	--Quand cette carte a été Invoquée Normalement : récupérer 1 Magie du Cimetière
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -26,6 +25,7 @@ function s.initial_effect(c)
 	--Si elle va quitter le Terrain face recto : la bannir à la place
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
+	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 	e3:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
 	e3:SetCondition(s.recon)
 	e3:SetValue(LOCATION_REMOVED)

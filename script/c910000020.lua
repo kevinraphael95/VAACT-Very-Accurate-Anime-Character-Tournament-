@@ -1,17 +1,19 @@
 --[VAACT] Magicien Marron Expérimenté (Skilled Brown Magician)
 local s,id=GetID()
 
+--ID de la carte officielle (traitée comme elle) : à modifier ici si besoin
+s.officiel=88232397
 --IDs des cartes ajoutées depuis l'Extérieur du Duel : à modifier ici si besoin
 s.multiplicateur=910000022   --"Multiplicateur" (Multiply)
 s.crepuscule=910000023       --"Crépuscule à Cinq Étoiles"
 
 function s.initial_effect(c)
-	-- Traité comme Skilled Brown Magician officiel (ID 73752131)
-	local e_add = Effect.CreateEffect(c)
+	--Traité comme Skilled Brown Magician officiel
+	local e_add=Effect.CreateEffect(c)
 	e_add:SetType(EFFECT_TYPE_SINGLE)
 	e_add:SetCode(EFFECT_ADD_CODE)
 	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e_add:SetValue(73752131)
+	e_add:SetValue(s.officiel)
 	c:RegisterEffect(e_add)
 
 	c:EnableCounterPermit(COUNTER_SPELL)
@@ -42,7 +44,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.counter_place_list={COUNTER_SPELL}
-s.listed_names={910000022,910000023}
+s.listed_names={s.multiplicateur,s.crepuscule}
 
 function s.acop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

@@ -1,14 +1,13 @@
 --[VAACT] Slifer
 local s,id=GetID()
 function s.initial_effect(c)
-	-- Traité comme Slifer officiel (ID 10000020)
+	--Traité comme Slifer officiel (ID 10000020)
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
 	e0:SetCode(EFFECT_ADD_CODE)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e0:SetValue(10000020)
 	c:RegisterEffect(e0)
-
 	--Nécessite 3 Sacrifices pour être Invoqué Normalement ou Posé
 	local e1=aux.AddNormalSummonProcedure(c,true,false,3,3)
 	local e2=aux.AddNormalSetProcedure(c,true,false,3,3)
@@ -39,16 +38,16 @@ function s.initial_effect(c)
 	e6:SetRange(LOCATION_MZONE)
 	e6:SetOperation(s.resetop)
 	c:RegisterEffect(e6)
-	--ATK/DEF : 1000 par carte dans votre main
+	--Gagne 1000 ATK/DEF pour chaque carte dans votre main
 	local e7=Effect.CreateEffect(c)
 	e7:SetType(EFFECT_TYPE_SINGLE)
-	e7:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_UNCOPYABLE)
+	e7:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e7:SetRange(LOCATION_MZONE)
-	e7:SetCode(EFFECT_SET_BASE_ATTACK)
+	e7:SetCode(EFFECT_UPDATE_ATTACK)
 	e7:SetValue(s.adval)
 	c:RegisterEffect(e7)
 	local e8=e7:Clone()
-	e8:SetCode(EFFECT_SET_BASE_DEFENSE)
+	e8:SetCode(EFFECT_UPDATE_DEFENSE)
 	c:RegisterEffect(e8)
 	--Monstres Invoqués en Position d'Attaque chez l'adversaire : -2000 ATK, puis détruits si ATK 0
 	local e9=Effect.CreateEffect(c)

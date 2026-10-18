@@ -1,12 +1,16 @@
 --[VAACT] Van'Dalgyon the Dark Dragon Lord
 local s,id=GetID()
+
+--ID de la carte officielle (traitée comme elle) : à modifier ici si besoin
+s.officiel=24857466
+
 function s.initial_effect(c)
-	-- Traité comme Van'Dalgyon officiel (ID 33746252)
-	local e_add = Effect.CreateEffect(c)
+	--Traité comme Van'Dalgyon officiel
+	local e_add=Effect.CreateEffect(c)
 	e_add:SetType(EFFECT_TYPE_SINGLE)
 	e_add:SetCode(EFFECT_ADD_CODE)
 	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e_add:SetValue(33746252)
+	e_add:SetValue(s.officiel)
 	c:RegisterEffect(e_add)
 
 	--Retenir le type des cartes de l'adversaire auxquelles vous répondez avec un Piège

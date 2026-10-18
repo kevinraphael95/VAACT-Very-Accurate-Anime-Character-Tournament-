@@ -5,8 +5,8 @@ local s,id=GetID()
 s.jeton=910001145
 
 function s.initial_effect(c)
-	-- Traité comme Multiplicateur officiel (ID 40703222)
-	local e_add = Effect.CreateEffect(c)
+	--Traité comme Multiplicateur officiel (ID 40703222)
+	local e_add=Effect.CreateEffect(c)
 	e_add:SetType(EFFECT_TYPE_SINGLE)
 	e_add:SetCode(EFFECT_ADD_CODE)
 	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
@@ -41,7 +41,7 @@ end
 --Monstre face recto avec 500 ATK ou moins, copiable en Jeton
 function s.filter(c,tp)
 	return c:IsFaceup() and c:IsAttackBelow(500)
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,s.jeton,nil,TYPES_TOKEN,
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,s.jeton,0,TYPES_TOKEN,
 			c:GetAttack(),c:GetDefense(),c:GetLevel(),c:GetRace(),c:GetAttribute())
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -67,7 +67,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		n=Duel.AnnounceNumberRange(tp,1,ft)
 	end
 	--Caractéristiques copiées
-	local code=mc:GetOriginalCode()
+	local code=mc:GetCode()
 	local race,att=mc:GetRace(),mc:GetAttribute()
 	local atk,def=mc:GetAttack(),mc:GetDefense()
 	local pos=mc:GetPosition()
