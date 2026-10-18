@@ -1,15 +1,19 @@
---[VAACT] Brain Control
+--[VAACT] [ANIME] Brain Control
 local s,id=GetID()
+
+--ID de la carte officielle (traitée comme elle) : à modifier ici si besoin
+s.officiel=87910978
+
 function s.initial_effect(c)
-	-- Traité comme Brain Control officiel (ID 87910978)
-	local e_add = Effect.CreateEffect(c)
+	--Traitée comme Brain Control officielle
+	local e_add=Effect.CreateEffect(c)
 	e_add:SetType(EFFECT_TYPE_SINGLE)
 	e_add:SetCode(EFFECT_ADD_CODE)
 	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e_add:SetValue(87910978)
+	e_add:SetValue(s.officiel)
 	c:RegisterEffect(e_add)
 
-	--Take control 1 of opponent's monsters
+	--Payer 800 LP, cibler 1 monstre face recto de l'adversaire : en prendre le contrôle jusqu'à la End Phase
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_CONTROL)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)

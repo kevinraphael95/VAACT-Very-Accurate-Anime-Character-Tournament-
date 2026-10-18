@@ -1,75 +1,59 @@
---[VAACT] Voleur d'Esprit
+--[VAACT] Soul Taker
 local s,id=GetID()
 
--- === IDs FACILEMENT MODIFIABLES ===
-local VOLEUR_ID = 910000063 -- L'ID de cette carte
-local OFFICIAL_ID = 23205979 -- L'ID officiel de Spirit Reaper (Voleur d'Esprit)
--- ==================================
+--ID de la carte officielle (traitée comme elle) : à modifier ici si besoin
+s.officiel=81510157
 
 function s.initial_effect(c)
-	-- Traité comme Voleur d'Esprit officiel
-	local e_add = Effect.CreateEffect(c)
+	--Traitée comme Soul Taker officielle
+	local e_add=Effect.CreateEffect(c)
 	e_add:SetType(EFFECT_TYPE_SINGLE)
 	e_add:SetCode(EFFECT_ADD_CODE)
 	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e_add:SetValue(OFFICIAL_ID)
+	e_add:SetValue(s.officiel)
 	c:RegisterEffect(e_add)
 
-	-- 1) Activation de la carte
+	--L'adversaire gagne 1000 LP, puis cibler 1 monstre face recto adverse : le détruire, ou le Sacrifier comme si vous le contrôliez
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCategory(CATEGORY_RECOVER+CATEGORY_DESTROY)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCost(s.cost)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 end
-
-function s.filter(c)
-	return c:IsFaceup() and c:IsMonster()
+function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.Recover(1-tp,1000,REASON_COST)
 end
-
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and s.filter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,0,LOCATION_MZONE,1,nil) end
-	
+	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and chkc:IsFaceup() end
+	if chk==0 then return Duel.IsExistingTarget(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	local g=Duel.SelectTarget(tp,s.filter,tp,0,LOCATION_MZONE,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,1-tp,1000) -- L'adversaire (1-tp) gagne 1000 LP
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
+	local g=Duel.SelectTarget(tp,Card.IsFaceup,tp,0,LOCATION_MZONE,1,1,nil)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 end
-
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	
-	-- 1) L'adversaire gagne 1000 LP
-	Duel.Recover(1-tp, 1000, REASON_EFFECT)
-	
-	if not (tc and tc:IsRelateToEffect(e) and tc:IsFaceup()) then return end
-	
-	-- 2) Choix de l'effet
-	local op=Duel.SelectOption(tp, aux.Stringid(id,0), aux.Stringid(id,1))
-	
-	if op==0 then
-		-- Option A : Détruire le monstre
-		Duel.Destroy(tc, REASON_EFFECT)
+	if not (tc and tc:IsFaceup() and tc:IsRelateToEffect(e)) then return end
+	local op=Duel.SelectEffect(tp,
+		{true,aux.Stringid(id,0)},
+		{true,aux.Stringid(id,1)})
+	if op==1 then
+		--Le détruire
+		Duel.Destroy(tc,REASON_EFFECT)
 	else
-		-- Option B : Permettre de sacrifier le monstre ce tour-ci
+		--Ce tour-ci, vous pouvez le Sacrifier comme si vous le contrôliez
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_ADD_EXTRA_TRIBUTE)
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-		e1:SetTargetRange(LOCATION_MZONE, 0) -- Dans les zones monstres
-		e1:SetTarget(s.tgtg) -- Utilisation d'une fonction dédiée
-		e1:SetValue(POS_FACEUP)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+		e1:SetCode(EFFECT_EXTRA_RELEASE_SUM)
+		e1:SetReset(RESETS_STANDARD_PHASE_END)
 		tc:RegisterEffect(e1)
+		local e2=e1:Clone()
+		e2:SetCode(EFFECT_EXTRA_RELEASE_NONSUM)
+		tc:RegisterEffect(e2)
 	end
-end
-
-function s.tgtg(e, c)
-    -- Autorise le sacrifice si la carte est la cible de l'effet
-	return c == e:GetHandler()
 end

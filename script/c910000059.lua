@@ -1,83 +1,69 @@
---[VAACT] Cercueil Maléfique
+--[VAACT] Dark Renewal
 local s,id=GetID()
 
--- === IDs FACILEMENT MODIFIABLES ===
-local CERCEUIL_ID = 910000059 -- L'ID de cette carte
-local OFFICIAL_ID = 65878864 -- L'ID officiel de Dark Coffin
--- ==================================
+--ID de la carte officielle (traitée comme elle) : à modifier ici si besoin
+s.officiel=9287078
 
 function s.initial_effect(c)
-	-- Traitée comme Cercueil Maléfique officiel
-	local e_add = Effect.CreateEffect(c)
+	--Traité comme Dark Renewal officiel
+	local e_add=Effect.CreateEffect(c)
 	e_add:SetType(EFFECT_TYPE_SINGLE)
 	e_add:SetCode(EFFECT_ADD_CODE)
 	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e_add:SetValue(OFFICIAL_ID)
+	e_add:SetValue(s.officiel)
 	c:RegisterEffect(e_add)
 
-	-- Activation
+	--Quand l'adversaire Invoque : cibler 1 de ces monstres + 1 de vos monstres, les envoyer au Cimetière, puis Invoquer 1 Magicien
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOGRAVE+CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS+EVENT_SUMMON_SUCCESS)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+	e1:SetCode(EVENT_SUMMON_SUCCESS)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
+	local e2=e1:Clone()
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	c:RegisterEffect(e2)
 end
-
+function s.filter1(c,e,tp)
+	return c:IsSummonPlayer(1-tp) and c:IsLocation(LOCATION_MZONE) and c:IsCanBeEffectTarget(e) and c:IsAbleToGrave()
+		and Duel.IsExistingTarget(Card.IsAbleToGrave,tp,LOCATION_MZONE,0,1,c)
+end
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return false end
+	if chk==0 then return eg and eg:IsExists(s.filter1,1,nil,e,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g1=eg:FilterSelect(tp,s.filter1,1,1,nil,e,tp)
+	Duel.SetTargetCard(g1)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g2=Duel.SelectTarget(tp,Card.IsAbleToGrave,tp,LOCATION_MZONE,0,1,1,g1:GetFirst())
+	g1:Merge(g2)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g1,2,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,0,tp,LOCATION_DECK|LOCATION_GRAVE)
+end
 function s.spfilter(c,e,tp)
 	return c:IsRace(RACE_SPELLCASTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-
-function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	-- On vérifie que l'adversaire a bien invoqué un monstre
-	local g = eg:Filter(Card.IsControler,nil,1-tp)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) end
-	if chk==0 then
-		return #g>0 
-			and Duel.IsExistingTarget(nil,tp,LOCATION_MZONE,0,1,nil)
-			and Duel.IsExistingTarget(Card.IsFaceup,1-tp,LOCATION_MZONE,0,1,nil)
-	end
-	
-	-- On cible un monstre adverse (celui qu'il vient d'invoquer, ou un autre)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	local sg=Duel.SelectTarget(tp,Card.IsFaceup,1-tp,LOCATION_MZONE,0,1,1,nil)
-	
-	-- On cible un de tes monstres
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	local mg=Duel.SelectTarget(tp,nil,tp,LOCATION_MZONE,0,1,1,nil)
-	
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,sg+mg,2,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE+LOCATION_DECK)
-end
-
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	local tg = Duel.GetTargetCards(e)
-	if #tg < 2 then return end
-	
-	-- On récupère nos deux monstres ciblés
-	local enemy_mon = tg:Filter(Card.IsControler,nil,1-tp):GetFirst()
-	local my_mon = tg:Filter(Card.IsControler,nil,tp):GetFirst()
-	
-	if not (enemy_mon and my_mon) then return end
-	
-	local is_spellcaster = my_mon:IsRace(RACE_SPELLCASTER)
-	
-	-- 1) Envoyer les deux au Cimetière
-	Duel.SendtoGrave(Group.FromCards(enemy_mon, my_mon), REASON_EFFECT)
-	
-	-- 2) Invoquer Spécialement un Magicien
-	local loc = LOCATION_GRAVE
-	if is_spellcaster then
-		loc = LOCATION_GRAVE+LOCATION_DECK -- Si c'était un Magicien, on peut prendre dans le Deck
-	end
-	
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg=Duel.SelectMatchingCard(tp,s.spfilter,tp,loc,0,1,1,nil,e,tp)
+	local g=Duel.GetTargetCards(e)
+	if #g~=2 then return end
+	local mc=g:Filter(Card.IsControler,nil,tp):GetFirst()
+	if not mc then return end
+	local was_spellcaster=mc:IsRace(RACE_SPELLCASTER)
+	if Duel.SendtoGrave(g,REASON_EFFECT)==2 and g:IsExists(Card.IsLocation,2,nil,LOCATION_GRAVE) then
+		if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+		--Depuis le Cimetière, ou aussi depuis le Deck si votre monstre ciblé était un Magicien
+		local loc=LOCATION_GRAVE
+		if was_spellcaster then loc=LOCATION_GRAVE|LOCATION_DECK end
+		local sg=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.spfilter),tp,loc,0,nil,e,tp)
 		if #sg>0 then
-			Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+			local tg=sg:Select(tp,0,1,nil) --"vous pouvez"
+			if #tg>0 then
+				Duel.BreakEffect()
+				Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
+			end
 		end
 	end
 end
