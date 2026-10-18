@@ -1,50 +1,34 @@
---[VAACT] Lien Spirituel
+--[VAACT] Lien Spirituel (Soul Rope)
 local s,id=GetID()
-local LIEN_ID = 910000069
-
 function s.initial_effect(c)
-	-- Traité comme Spiritual Link officiel (ID 85138703)
-	local e_add = Effect.CreateEffect(c)
-	e_add:SetType(EFFECT_TYPE_SINGLE)
-	e_add:SetCode(EFFECT_ADD_CODE)
-	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e_add:SetValue(85138703)
-	c:RegisterEffect(e_add)
-
+	--Activation
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_DESTROYED)
-	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+	e1:SetCode(EVENT_TO_GRAVE)
 	e1:SetCondition(s.condition)
-	e1:SetCost(s.cost)
+	e1:SetCost(Cost.PayLP(1000))
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 end
-
+--Condition : Un monstre que vous contrôlez est détruit par un effet
+function s.cfilter(c,tp)
+	return c:IsReason(REASON_EFFECT) and c:IsReason(REASON_DESTROY) and c:IsMonster()
+		and c:IsPreviousControler(tp) and c:IsPreviousLocation(LOCATION_MZONE)
+end
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	local g = eg:Filter(Card.IsPreviousControler,nil,tp)
-	return g:IsExists(Card.IsPreviousLocation,nil,LOCATION_MZONE) and g:IsExists(Card.IsType,nil,TYPE_MONSTER)
+	return not Duel.IsDamageStep() and eg:IsExists(s.cfilter,1,nil,tp)
 end
-
-function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,1000) end
-	Duel.PayLPCost(tp,1000)
-end
-
+--Filtre : Monstre Niveau 4
 function s.spfilter(c,e,tp)
-	return c:IsLevel(4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:GetLevel()==4 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then
-		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-			and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp)
-	end
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
-
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)

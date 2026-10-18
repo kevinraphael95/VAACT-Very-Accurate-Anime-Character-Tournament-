@@ -1,110 +1,103 @@
---[VAACT] Quinte du Harlequin
+--[VAACT] Quinte du Harlequin (Joker's Straight)
 local s,id=GetID()
-local HARLEQUIN_ID = 910000067
-local QUEEN_ID = 910000021
-local JACK_ID = 910000032
-local KING_ID = 910000031
-
 function s.initial_effect(c)
-	-- Traité comme Court of Justice officiel (ID 89399912)
-	local e_add = Effect.CreateEffect(c)
-	e_add:SetType(EFFECT_TYPE_SINGLE)
-	e_add:SetCode(EFFECT_ADD_CODE)
-	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e_add:SetValue(89399912)
-	c:RegisterEffect(e_add)
-
+	--Activation
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOHAND+CATEGORY_HANDES)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_SUMMON+CATEGORY_HANDES)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1, HARLEQUIN_ID)
+	e1:SetCountLimit(1,id)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
-
+	--Récupération depuis le Cimetière
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetRange(LOCATION_GRAVE)
+	e2:SetDescription(aux.Stringid(id,1))
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_TODECK)
+	e2:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_FIELD)
+	e2:SetCode(EVENT_PHASE+PHASE_END)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetCountLimit(1, HARLEQUIN_ID+1)
-	e2:SetCondition(s.gycon)
-	e2:SetTarget(s.gytg)
-	e2:SetOperation(s.gyop)
+	e2:SetRange(LOCATION_GRAVE)
+	e2:SetCountLimit(1,{id,1})
+	e2:SetTarget(s.tdtg)
+	e2:SetOperation(s.tdop)
 	c:RegisterEffect(e2)
 end
-
+s.listed_names={CARD_JACK_KNIGHT,CARD_QUEEN_KNIGHT,CARD_KING_KNIGHT}
+-- Filtre d'Invocation Spéciale : Reine ou Valet
 function s.spfilter(c,e,tp)
-	return (c:IsCode(QUEEN_ID) or c:IsCode(JACK_ID)) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return (c:IsCode(CARD_QUEEN_KNIGHT) or c:IsCode(CARD_JACK_KNIGHT)) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
+-- Filtre d'ajout à la main : Roi ou Valet
 function s.thfilter(c)
-	return c:IsCode(KING_ID) or c:IsCode(JACK_ID)
+	return c:IsCode(CARD_KING_KNIGHT,CARD_JACK_KNIGHT) and c:IsAbleToHand()
 end
-
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then
-		return Duel.IsExistingMatchingCard(s.spfilter, tp, LOCATION_DECK, 0, 1, nil, e, tp)
-			and Duel.IsExistingMatchingCard(s.thfilter, tp, LOCATION_DECK, 0, 1, nil)
-			and Duel.IsExistingMatchingCard(Card.IsDiscardable, tp, LOCATION_HAND, 0, 1, nil)
-	end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON, nil, 1, tp, LOCATION_DECK)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND, nil, 1, tp, LOCATION_DECK)
-	Duel.SetOperationInfo(0,CATEGORY_HANDES, nil, 1, tp, 0)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,e:GetHandler(),REASON_EFFECT)
+		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp)
+		and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
-
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_DISCARD)
-	local dg = Duel.SelectMatchingCard(tp, Card.IsDiscardable, tp, LOCATION_HAND, 0, 1, 1, nil)
-	if #dg > 0 then
-		Duel.SendtoGrave(dg, REASON_DISCARD+REASON_EFFECT)
-	else
-		return
-	end
-	local sg = Duel.GetMatchingGroup(s.spfilter, tp, LOCATION_DECK, 0, nil, e, tp)
-	if #sg > 0 then
-		Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_SPSUMMON)
-		local ssp = sg:Select(tp, 1, 1, nil)
-		Duel.SpecialSummon(ssp, 0, tp, tp, false, false, POS_FACEUP)
-	end
-	local tg = Duel.GetMatchingGroup(s.thfilter, tp, LOCATION_DECK, 0, nil)
-	if #tg > 0 then
-		Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_ATOHAND)
-		local sth = tg:Select(tp, 1, 1, nil)
-		Duel.SendtoHand(sth, tp, REASON_EFFECT)
-		Duel.ConfirmCards(1-tp, sth)
-	end
+	--Restriction d'Invocation Spéciale (LUMIÈRE Guerrier uniquement) pendant ce tour
 	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetDescription(aux.Stringid(id,3))
 	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_EXTRA_SUMMON_COUNT)
-	e1:SetTargetRange(LOCATION_HAND+LOCATION_MZONE, 0)
-	e1:SetTarget(aux.TargetBoolFunction(Card.IsMonster))
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e1, tp)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+	e1:SetTargetRange(1,0)
+	e1:SetTarget(s.splimit)
+	e1:SetReset(RESET_PHASE|PHASE_END)
+	Duel.RegisterEffect(e1,tp)
+	
+	--Défausser 1 carte
+	if Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_EFFECT|REASON_DISCARD,nil,REASON_EFFECT)==0 
+		or Duel.GetLocationCount(tp,LOCATION_MZONE)<1 then return end
+		
+	--Invoquer Spécialement la Reine ou le Valet
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local sg=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
+	if #sg==0 or Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)==0 then return end
+	
+	--Ajouter le Roi ou le Valet à la main
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local hg=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
+	if #hg==0 or Duel.SendtoHand(hg,nil,REASON_EFFECT)==0 then return end
+	Duel.ConfirmCards(1-tp,hg)
+	
+	--Invocation Normale supplémentaire
+	local g=Duel.GetMatchingGroup(Card.IsSummonable,tp,LOCATION_HAND,0,nil,true,nil)
+	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+		Duel.BreakEffect()
+		Duel.ShuffleHand(tp)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+		sg=g:Select(tp,1,1,nil):GetFirst()
+		Duel.Summon(tp,sg,true,nil)
+	end
 end
-
-function s.gycon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase() == PHASE_END
+function s.splimit(e,c)
+	return not (c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsRace(RACE_WARRIOR)) and c:IsLocation(LOCATION_EXTRA)
 end
-function s.gyfilter(c)
-	return c:IsFaceup() and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsRace(RACE_WARRIOR)
+--Fonctions pour l'effet de Cimetière
+function s.tdfilter(c)
+	return c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsRace(RACE_WARRIOR) and c:IsAbleToDeck()
 end
-function s.gytg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.gyfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(s.gyfilter, tp, LOCATION_GRAVE, 0, 1, nil) end
-	Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_TODECK)
-	local g = Duel.SelectTarget(tp, s.gyfilter, tp, LOCATION_GRAVE, 0, 1, 1, nil)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK, g, 1, 0, 0)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND, e:GetHandler(), 1, 0, 0)
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tdfilter(chkc) end
+	if chk==0 then return e:GetHandler():IsAbleToHand()
+		and Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_GRAVE,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_GRAVE,0,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),1,0,0)
 end
-function s.gyop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
+function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc and tc:IsRelateToEffect(e) and Duel.SendtoDeck(tc, nil, SEQ_DECKSHUFFLE, REASON_EFFECT) > 0 then
-		if c:IsRelateToEffect(e) then
-			Duel.SendtoHand(c, tp, REASON_EFFECT)
-			Duel.ConfirmCards(1-tp, c)
-		end
+	local c=e:GetHandler()
+	if tc and tc:IsRelateToEffect(e) and Duel.SendtoDeck(tc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)~=0
+		and tc:IsLocation(LOCATION_DECK|LOCATION_EXTRA) and c:IsRelateToEffect(e) then
+		Duel.SendtoHand(c,nil,REASON_EFFECT)
 	end
 end
