@@ -1,5 +1,15 @@
 --[VAACT] Invocation à la Vitesse de l'Éclair (Thunderspeed Summon)
 local s,id=GetID()
+
+-- IDs officiels
+local OFF_QUEEN = CARD_QUEEN_KNIGHT
+local OFF_KING  = CARD_KING_KNIGHT
+local OFF_JACK  = CARD_JACK_KNIGHT
+-- IDs VAACT
+local CUS_QUEEN = 910000021
+local CUS_KING  = 910000031
+local CUS_JACK  = 910000032
+
 function s.initial_effect(c)
 	--Activation
 	local e1=Effect.CreateEffect(c)
@@ -14,33 +24,37 @@ function s.initial_effect(c)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 end
-s.listed_names={id,CARD_JACK_KNIGHT,CARD_KING_KNIGHT,CARD_QUEEN_KNIGHT}
+s.listed_names={id,OFF_QUEEN,OFF_KING,OFF_JACK,CUS_QUEEN,CUS_KING,CUS_JACK}
+
 -- Filtre pour chercher un monstre Niv 10 non-TÉNÈBRES avec ? ATK
 function s.thfilter(c)
 	return c:IsMonster() and c:GetTextAttack()==-2 and c:IsLevel(10)
 		and c:IsAttributeExcept(ATTRIBUTE_DARK) and c:IsAbleToHand()
 end
-function s.mfilter(c,code)
-	return c:IsFaceup() and c:IsCode(code)
+-- Vérifie si on contrôle un Chevalier (officiel OU custom)
+function s.hasKnight(tp, code_off, code_cus)
+	return Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,code_off,code_cus)
 end
 function s.sfilter(c)
 	return c:IsSummonable(true,nil) and c:IsLevel(10)
 end
+
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local a=Duel.IsExistingMatchingCard(s.sfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil)
-	local b=Duel.IsExistingMatchingCard(s.mfilter,tp,LOCATION_MZONE,0,1,nil,CARD_JACK_KNIGHT)
-		and Duel.IsExistingMatchingCard(s.mfilter,tp,LOCATION_MZONE,0,1,nil,CARD_KING_KNIGHT)
-		and Duel.IsExistingMatchingCard(s.mfilter,tp,LOCATION_MZONE,0,1,nil,CARD_QUEEN_KNIGHT)
+	local b=s.hasKnight(tp,OFF_QUEEN,CUS_QUEEN)
+		and s.hasKnight(tp,OFF_KING,CUS_KING)
+		and s.hasKnight(tp,OFF_JACK,CUS_JACK)
 		and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil)
 	if chk==0 then return a or b end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,0,0)
 end
+
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.IsExistingMatchingCard(s.sfilter,tp,LOCATION_HAND|LOCATION_MZONE,0,1,nil)
-	local b=Duel.IsExistingMatchingCard(s.mfilter,tp,LOCATION_MZONE,0,1,nil,CARD_JACK_KNIGHT)
-		and Duel.IsExistingMatchingCard(s.mfilter,tp,LOCATION_MZONE,0,1,nil,CARD_KING_KNIGHT)
-		and Duel.IsExistingMatchingCard(s.mfilter,tp,LOCATION_MZONE,0,1,nil,CARD_QUEEN_KNIGHT)
+	local b=s.hasKnight(tp,OFF_QUEEN,CUS_QUEEN)
+		and s.hasKnight(tp,OFF_KING,CUS_KING)
+		and s.hasKnight(tp,OFF_JACK,CUS_JACK)
 		and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil)
 	if not (a or b) then return end
 	if (not a and b) or (b and Duel.SelectYesNo(tp,aux.Stringid(id,1))) then
