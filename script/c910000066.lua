@@ -1,18 +1,27 @@
---[VAACT] Fusion de Figure (Face Card Fusion)
+--[VAACT] Fusion de Figure
+--Base : c29062925.lua (Face Card Fusion) - Scripted by Eerie Code
 local s,id=GetID()
+
+-- IDs regroupés en haut (custom VAACT + officiels)
+local ID_REINE_VAACT=910000021
+local ID_ROI_VAACT=910000031
+local ID_VALET_VAACT=910000032
+
 function s.initial_effect(c)
-	--Invocation Fusion
-	local e1=Fusion.CreateSummonEff(c,s.ffilter,nil,s.fextra,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,s.extratg)
+	--fusfilter=nil : n'importe quel Monstre Fusion (plus seulement LUMIERE Guerrier)
+	local e1=Fusion.CreateSummonEff(c,nil,nil,s.fextra,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,s.extratg)
 	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	c:RegisterEffect(e1)
 end
-s.listed_names={CARD_JACK_KNIGHT,CARD_QUEEN_KNIGHT,CARD_KING_KNIGHT}
--- Vérifie que le Monstre Fusion est un Guerrier LUMIÈRE
-function s.ffilter(c)
-	return c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsRace(RACE_WARRIOR) and c:IsType(TYPE_FUSION)
+s.listed_names={ID_REINE_VAACT,ID_ROI_VAACT,ID_VALET_VAACT,CARD_JACK_KNIGHT,CARD_QUEEN_KNIGHT,CARD_KING_KNIGHT}
+
+function s.knightfilter(c)
+	return c:IsFaceup() and c:IsCode(
+		ID_REINE_VAACT,ID_ROI_VAACT,ID_VALET_VAACT,
+		CARD_QUEEN_KNIGHT,CARD_KING_KNIGHT,CARD_JACK_KNIGHT)
 end
 function s.fextra(e,tp,mg)
-	if Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,CARD_JACK_KNIGHT,CARD_QUEEN_KNIGHT,CARD_KING_KNIGHT),tp,LOCATION_ONFIELD,0,1,nil) then
+	if Duel.IsExistingMatchingCard(s.knightfilter,tp,LOCATION_ONFIELD,0,1,nil) then
 		local sg=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,LOCATION_DECK,0,nil)
 		if #sg>0 then
 			return sg,s.fcheck
