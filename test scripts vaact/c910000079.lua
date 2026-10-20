@@ -17,10 +17,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e_add_code)
 	--Fusion Material : Reine + Valet + Roi (codes custom OU officiels, copie de nom comprise)
 	c:EnableReviveLimit()
-	Fusion.AddProcMix(c,false,false,
-		aux.FilterBoolFunctionEx(Card.IsCode,ID_REINE_VAACT,CARD_QUEEN_KNIGHT),
-		aux.FilterBoolFunctionEx(Card.IsCode,ID_VALET_VAACT,CARD_JACK_KNIGHT),
-		aux.FilterBoolFunctionEx(Card.IsCode,ID_ROI_VAACT,CARD_KING_KNIGHT))
+	Fusion.AddProcMix(c,false,false,s.reinefilter,s.valetfilter,s.roifilter)
 	--Negate
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -37,6 +34,20 @@ function s.initial_effect(c)
 	aux.DoubleSnareValidity(c,LOCATION_MZONE)
 end
 s.listed_names={ID_REINE_VAACT,ID_ROI_VAACT,ID_VALET_VAACT,CARD_QUEEN_KNIGHT,CARD_JACK_KNIGHT,CARD_KING_KNIGHT}
+
+-- Filtres de matériels (custom OU officiel, noms copiés compris)
+function s.reinefilter(c,fc,sumtype,tp)
+	return c:IsSummonCode(fc,sumtype,tp,ID_REINE_VAACT,CARD_QUEEN_KNIGHT)
+		or c:IsCode(ID_REINE_VAACT,CARD_QUEEN_KNIGHT)
+end
+function s.valetfilter(c,fc,sumtype,tp)
+	return c:IsSummonCode(fc,sumtype,tp,ID_VALET_VAACT,CARD_JACK_KNIGHT)
+		or c:IsCode(ID_VALET_VAACT,CARD_JACK_KNIGHT)
+end
+function s.roifilter(c,fc,sumtype,tp)
+	return c:IsSummonCode(fc,sumtype,tp,ID_ROI_VAACT,CARD_KING_KNIGHT)
+		or c:IsCode(ID_ROI_VAACT,CARD_KING_KNIGHT)
+end
 
 function s.discon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
