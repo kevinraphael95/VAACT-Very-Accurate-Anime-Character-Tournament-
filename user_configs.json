@@ -1,0 +1,64 @@
+{
+  "repos": [
+    {
+      "url": "https://github.com/Mazorn/VAACT-Very-Accurate-Anime-Character-Tournament-",
+      "repo_name": "VAACT",
+      "repo_path": "./expansions/VAACT",
+      "is_language": false,
+      "language": "",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/Mazorn/VAACT-Very-Accurate-Anime-Character-Tournament-Deck",
+      "repo_name": "VAACT-Deck",
+      "repo_path": "./deck/VAACT",
+      "is_language": false,
+      "language": "",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/Mazorn/VAACT-Very-Accurate-Anime-Character-Tournament-Banlist",
+      "repo_name": "VAACT-Banlist",
+      "repo_path": "./lflists/VAACT",
+      "is_language": false,
+      "language": "",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/Mazorn/VAACT-Very-Accurate-Anime-Character-Tournament-Puzzle",
+      "repo_name": "VAACT-Puzzle",
+      "repo_path": "./puzzles/VAACT",
+      "is_language": false,
+      "language": "",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/kevinraphael95/VAACT-patch-fr",
+      "repo_name": "VAACT FR",
+      "repo_path": "./config/languages/Français/VAACT",
+      "is_language": true,
+      "language": "Français",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    }
+  ],
+  "servers": [
+    {
+      "name": "VAACT",
+      "address": "146.59.225.202",
+      "duelport": 7911,
+      "roomaddress": "146.59.225.202",
+      "roomlistprotocol": "http",
+      "roomlistport": 7922
+    }
+  ]
+}
