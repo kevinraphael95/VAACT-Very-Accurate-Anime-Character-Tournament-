@@ -3,6 +3,14 @@
 --Scripted by Eerie Code
 local s,id=GetID()
 function s.initial_effect(c)
+	-- === AJOUT AUTO : Considérée comme la carte officielle (ID 97631303) ===
+	local e_add_code = Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(97631303)
+	c:RegisterEffect(e_add_code)
+	-- ================================================================
 	--Special Summon itself or 1 listed monster
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -26,7 +34,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.drop)
 	c:RegisterEffect(e2)
 end
-s.listed_names={910000000,910000001}
+s.listed_names={CARD_DARK_MAGICIAN,CARD_DARK_MAGICIAN_GIRL}
 function s.cfilter(c)
 	return c:IsRace(RACE_SPELLCASTER) and c:IsLevelAbove(6) and c:IsAbleToGraveAsCost()
 end
@@ -55,7 +63,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 end
 function s.spfilter(c,e,tp)
-	return c:IsCode(910000000,910000001) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsCode(CARD_DARK_MAGICIAN,CARD_DARK_MAGICIAN_GIRL) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local op=e:GetLabel()

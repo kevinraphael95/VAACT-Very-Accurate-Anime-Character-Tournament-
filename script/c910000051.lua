@@ -1,7 +1,15 @@
---死者蘇生(EU)
+--[VAACT] Spell Card "Monster Reborn"
 local s,id=GetID()
 function s.initial_effect(c)
-	--Activate
+	-- Traitée comme la carte officielle "Spell Card 'Monster Reborn'" (ID 28958464)
+	local e_add = Effect.CreateEffect(c)
+	e_add:SetType(EFFECT_TYPE_SINGLE)
+	e_add:SetCode(EFFECT_ADD_CODE)
+	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add:SetValue(28958464)
+	c:RegisterEffect(e_add)
+
+	--Activation
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)

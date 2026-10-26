@@ -2,6 +2,14 @@
 --Magician of Dark Illusion
 local s,id=GetID()
 function s.initial_effect(c)
+	-- === AJOUT AUTO : Considérée comme la carte officielle (ID 35191415) ===
+	local e_add_code = Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(35191415)
+	c:RegisterEffect(e_add_code)
+	-- ================================================================
 	--change name
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -37,7 +45,7 @@ function s.initial_effect(c)
 	e4:SetOperation(s.operation2)
 	c:RegisterEffect(e4)
 end
-s.listed_names={910000000}
+s.listed_names={CARD_DARK_MAGICIAN}
 function s.condition1(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsTurnPlayer(1-tp) and rp==tp and re:IsSpellTrapEffect()
 end
@@ -56,7 +64,7 @@ function s.condition2(e,tp,eg,ep,ev,re,r,rp)
 	return rp==tp and re:IsSpellTrapEffect()
 end
 function s.filter(c,e,tp)
-	return c:IsCode(910000000) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsCode(CARD_DARK_MAGICIAN) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.target2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.filter(chkc,e,tp) end

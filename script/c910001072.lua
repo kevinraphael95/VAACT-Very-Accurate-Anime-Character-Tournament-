@@ -2,6 +2,14 @@
 --Cyberse Wizard
 local s,id=GetID()
 function s.initial_effect(c)
+	-- === AJOUT AUTO : Considérée comme la carte officielle (ID 36033786) ===
+	local e_add_code = Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(36033786)
+	c:RegisterEffect(e_add_code)
+	-- ================================================================
 	--change pos
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_POSITION)

@@ -2,6 +2,14 @@
 --Borreload Dragon
 local s,id=GetID()
 function s.initial_effect(c)
+	-- === AJOUT AUTO : Considérée comme la carte officielle (ID 31833038) ===
+	local e_add_code = Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(31833038)
+	c:RegisterEffect(e_add_code)
+	-- ================================================================
 	c:EnableReviveLimit()
 	--Link Summon procedure
 	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsType,TYPE_EFFECT),3)
@@ -74,10 +82,21 @@ function s.cttg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_CONTROL,tc,1,tp,0)
 end
 function s.ctop(e,tp,eg,ep,ev,re,r,rp)
-local c=e:GetHandler()
-local tc=Duel.GetFirstTarget()
-if not (c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) and tc:IsControler(1-tp)) then return end
+	local c=e:GetHandler()
+	local tc=Duel.GetFirstTarget()
+	if not (c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) and tc:IsControler(1-tp)) then return end
 	local zone=c:GetLinkedZone()&ZONES_MMZ
-	if Duel.GetControl(tc,tp,PHASE_END,1,zone) then
+	if Duel.GetControl(tc,tp,0,0,zone) then
+		local turn_ct=Duel.GetTurnCount()
+		--Send it to the GY during the End Phase of the next turn
+		aux.DelayedOperation(tc,PHASE_END,id,e,tp,
+			function(ag)
+				Duel.SendtoGrave(ag,REASON_EFFECT)
+			end,
+			function()
+				return Duel.GetTurnCount()==turn_ct+1
+			end,
+			nil,2
+		)
 	end
 end

@@ -1,7 +1,20 @@
 --キングス・ナイト
 --King's Knight
 local s,id=GetID()
+
+-- IDs de tes cartes VAACT
+local CUS_QUEEN = 910000021
+local CUS_JACK  = 910000032
+
 function s.initial_effect(c)
+	-- === AJOUT AUTO : considérée comme la carte officielle (ID 64788463) ===
+	local e_add_code = Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(64788463)
+	c:RegisterEffect(e_add_code)
+	-- =====================================================================
 	--spsummon
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -13,21 +26,30 @@ function s.initial_effect(c)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
 end
-s.listed_names={CARD_QUEEN_KNIGHT,CARD_JACK_KNIGHT}
+
+-- On liste les deux IDs
+s.listed_names={CARD_QUEEN_KNIGHT,CARD_JACK_KNIGHT,CUS_QUEEN,CUS_JACK}
+
+-- Filtre : Reine officielle OU Reine custom
 function s.cfilter(c)
-	return c:IsFaceup() and c:IsCode(CARD_QUEEN_KNIGHT)
+	return c:IsFaceup() and c:IsCode(CARD_QUEEN_KNIGHT, CUS_QUEEN)
 end
+
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_ONFIELD,0,1,nil)
 end
+
+-- Filtre : Valet officiel OU Valet custom
 function s.filter(c,e,tp)
-	return c:IsCode(CARD_JACK_KNIGHT) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsCode(CARD_JACK_KNIGHT, CUS_JACK) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
+
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
+
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)

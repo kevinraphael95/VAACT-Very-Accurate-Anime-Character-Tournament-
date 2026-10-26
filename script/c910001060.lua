@@ -4,6 +4,14 @@
 --Substitute ID
 local s,id=GetID()
 function s.initial_effect(c)
+	-- === AJOUT AUTO : Considérée comme la carte officielle (ID 88093706) ===
+	local e_add_code = Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(88093706)
+	c:RegisterEffect(e_add_code)
+	-- ================================================================
 	--Must be properly summoned before reviving
 	Link.AddProcedure(c,s.matfilter,2,2)
 	--Link summon procedure

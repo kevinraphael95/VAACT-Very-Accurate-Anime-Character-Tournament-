@@ -3,6 +3,14 @@
 --Scripted by fiftyfour
 local s,id=GetID()
 function s.initial_effect(c)
+	-- === AJOUT AUTO : Considérée comme la carte officielle (ID 56673112) ===
+	local e_add_code = Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(56673112)
+	c:RegisterEffect(e_add_code)
+	-- ================================================================
 	--Special summon 2 face card monsters from deck
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -16,12 +24,12 @@ function s.initial_effect(c)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
 end
-s.listed_names={910000021,910000031,910000032}
+s.listed_names={CARD_JACK_KNIGHT,CARD_KING_KNIGHT,CARD_QUEEN_KNIGHT}
 function s.spcond(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)<=1
 end
 function s.spfilter(c,e,tp,ft)
-	return c:IsCode(910000021,910000031,910000032)
+	return c:IsCode(CARD_JACK_KNIGHT,CARD_KING_KNIGHT,CARD_QUEEN_KNIGHT)
 		and ((c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP) and ft>0) or c:IsAbleToHand())
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)

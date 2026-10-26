@@ -1,41 +1,48 @@
---モンスター回収
---Monster Recovery
+--[VAACT] Monster Recovery
 local s,id=GetID()
+
+--ID de la carte officielle (traitée comme elle) : à modifier ici si besoin
+s.officiel=93108433
+
 function s.initial_effect(c)
-	--Activate
+	--Traitée comme Monster Recovery officielle
+	local e_add=Effect.CreateEffect(c)
+	e_add:SetType(EFFECT_TYPE_SINGLE)
+	e_add:SetCode(EFFECT_ADD_CODE)
+	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add:SetValue(s.officiel)
+	c:RegisterEffect(e_add)
+
+	--Mélanger votre main + vos monstres dans le Deck ; piocher autant de cartes +1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCost(s.atkcost)
+	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 end
-function s.mfilter(c,tp)
-	return c:IsAbleToDeck() 
-end
-function s.atkcost(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp) and Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)>0
-	end
-	local g1=Duel.GetMatchingGroup(s.mfilter,tp,LOCATION_MZONE,0,nil)
-	local g2=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
-	g1:Merge(g2)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g1,#g1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,#g2)
-end
-function s.activate(e,tp,eg,ep,ev,re,r,rp,cf)
-	local tc=Duel.GetFirstTarget()
+--Votre main (sans cette carte) + les monstres que vous contrôlez
+function s.getgroup(tp,c)
 	local g=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
-	local ct=#g
-	if tc and tc:IsRelateToEffect(e) and ct>0 then
-		g:AddCard(tc)
-		local f=Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-		local cf=f+1
-		Duel.ShuffleDeck(tp)
-		if ct>0 then
-			Duel.BreakEffect()
-			Duel.Draw(tp,cf,REASON_EFFECT)
-		end
+	g:Merge(Duel.GetFieldGroup(tp,LOCATION_MZONE,0))
+	g:RemoveCard(c)
+	return g:Filter(Card.IsAbleToDeck,nil)
+end
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=s.getgroup(tp,e:GetHandler())
+	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp,#g+1) end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,#g+1)
+end
+function s.activate(e,tp,eg,ep,ev,re,r,rp)
+	local g=s.getgroup(tp,e:GetHandler())
+	if #g==0 then return end
+	local ct=Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+	if ct==0 then return end
+	Duel.ShuffleDeck(tp)
+	if Duel.IsPlayerCanDraw(tp,ct+1) then
+		Duel.BreakEffect()
+		Duel.Draw(tp,ct+1,REASON_EFFECT)
 	end
 end

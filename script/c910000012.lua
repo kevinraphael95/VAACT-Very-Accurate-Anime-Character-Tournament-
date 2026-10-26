@@ -1,10 +1,17 @@
---熟練の赤魔術士
---Skilled Red Magician
+--[VAACT] Skilled Red Magician
 local s,id=GetID()
 function s.initial_effect(c)
+	--Traité comme Skilled Red Magician officiel (ID 65338781)
+	local e_add=Effect.CreateEffect(c)
+	e_add:SetType(EFFECT_TYPE_SINGLE)
+	e_add:SetCode(EFFECT_ADD_CODE)
+	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add:SetValue(65338781)
+	c:RegisterEffect(e_add)
+
 	c:EnableCounterPermit(COUNTER_SPELL)
 	c:SetCounterLimit(COUNTER_SPELL,2)
-	--add counter
+	--Placer 1 Compteur Magie quand une Magie s'est résolue
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
@@ -18,7 +25,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetOperation(s.acop)
 	c:RegisterEffect(e2)
-	--special summon
+	--Sacrifier avec 2 Compteurs : Invoquer 1 monstre "Archdémon" depuis la main, le Deck ou le Cimetière
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,0))
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -28,9 +35,10 @@ function s.initial_effect(c)
 	e3:SetTarget(s.sptg)
 	e3:SetOperation(s.spop)
 	c:RegisterEffect(e3)
-	--counter
+	--Bannir depuis le Cimetière : placer 1 Compteur Magie sur 1 de vos cartes
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,1))
+	e4:SetCategory(CATEGORY_COUNTER)
 	e4:SetType(EFFECT_TYPE_IGNITION)
 	e4:SetRange(LOCATION_GRAVE)
 	e4:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -51,7 +59,7 @@ function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Release(e:GetHandler(),REASON_COST)
 end
 function s.filter(c,e,tp)
-	return c:IsSetCard(SET_ARCHFIEND) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsMonster() and c:IsSetCard(SET_ARCHFIEND) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)

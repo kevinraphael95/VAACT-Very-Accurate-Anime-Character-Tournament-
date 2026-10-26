@@ -3,6 +3,14 @@
 --scripted by Larry126 and AlphaKretin
 local s,id=GetID()
 function s.initial_effect(c)
+	-- === AJOUT AUTO : Considérée comme la carte officielle (ID 30552375) ===
+	local e_add_code = Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(30552375)
+	c:RegisterEffect(e_add_code)
+	-- ================================================================
 	--equip
 	aux.AddEquipProcedure(c,0,aux.FilterBoolFunction(Card.IsRace,RACE_CYBERSE))
 	--atk up

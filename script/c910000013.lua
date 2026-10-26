@@ -1,10 +1,17 @@
---熟練の青魔道士
---Skilled Blue Magician
+--[VAACT] Skilled Blue Magician
 local s,id=GetID()
 function s.initial_effect(c)
+	--Traité comme Skilled Blue Magician officiel (ID 88901771)
+	local e_add=Effect.CreateEffect(c)
+	e_add:SetType(EFFECT_TYPE_SINGLE)
+	e_add:SetCode(EFFECT_ADD_CODE)
+	e_add:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add:SetValue(88901771)
+	c:RegisterEffect(e_add)
+
 	c:EnableCounterPermit(COUNTER_SPELL)
 	c:SetCounterLimit(COUNTER_SPELL,2)
-	--add counter
+	--Placer 1 Compteur Magie quand une Magie s'est résolue
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
@@ -18,7 +25,7 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetOperation(s.acop)
 	c:RegisterEffect(e1)
-	--special summon
+	--Sacrifier avec 2 Compteurs : Invoquer 1 monstre "Gaïa le Chevalier Implacable" depuis la main, le Deck ou le Cimetière
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -28,9 +35,10 @@ function s.initial_effect(c)
 	e2:SetTarget(s.sptg)
 	e2:SetOperation(s.spop)
 	c:RegisterEffect(e2)
-	--counter
+	--Bannir depuis le Cimetière : placer 1 Compteur Magie sur 1 de vos cartes
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
+	e3:SetCategory(CATEGORY_COUNTER)
 	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetRange(LOCATION_GRAVE)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -51,7 +59,7 @@ function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Release(e:GetHandler(),REASON_COST)
 end
 function s.filter(c,e,tp)
-	return c:IsSetCard(SET_GAIA_THE_FIERCE_KNIGHT) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsMonster() and c:IsSetCard(SET_GAIA_THE_FIERCE_KNIGHT) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
@@ -73,7 +81,7 @@ end
 function s.cttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsOnField() and chkc:IsControler(tp) and s.ctfilter(chkc) end
 	if chk==0 then return Duel.IsExistingTarget(s.ctfilter,tp,LOCATION_ONFIELD,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,94)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
 	Duel.SelectTarget(tp,s.ctfilter,tp,LOCATION_ONFIELD,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_COUNTER,nil,1,0,COUNTER_SPELL)
 end

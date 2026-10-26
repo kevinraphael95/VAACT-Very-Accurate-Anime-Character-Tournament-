@@ -1,7 +1,27 @@
---ジョーカーズ・ナイト
---Joker's Knight
+--[VAACT] Chevalier du Harlequin (Joker's Knight)
 local s,id=GetID()
+
+-- IDs regroupés en haut
+local ID_REINE_VAACT=910000021
+local ID_ROI_VAACT=910000031
+local ID_VALET_VAACT=910000032
+local ID_OFFICIEL_HARLEQUIN=29284413
+
+-- custom -> officiel (pour que le nom copié compte aussi pour les scripts qui testent l'ID officiel)
+local OFFICIEL={
+	[ID_REINE_VAACT]=CARD_QUEEN_KNIGHT,
+	[ID_ROI_VAACT]=CARD_KING_KNIGHT,
+	[ID_VALET_VAACT]=CARD_JACK_KNIGHT,
+}
+
 function s.initial_effect(c)
+	-- Considérée aussi comme la carte officielle
+	local e_add_code=Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(ID_OFFICIEL_HARLEQUIN)
+	c:RegisterEffect(e_add_code)
 	--special summon
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -26,9 +46,11 @@ function s.initial_effect(c)
 	e2:SetOperation(s.tdop)
 	c:RegisterEffect(e2)
 end
-s.listed_names={910000021,910000031,910000032}
+s.listed_names={ID_REINE_VAACT,ID_ROI_VAACT,ID_VALET_VAACT,CARD_QUEEN_KNIGHT,CARD_KING_KNIGHT,CARD_JACK_KNIGHT}
+
 function s.costfilter(c)
-	return c:IsCode(910000021,910000031,910000032) and c:IsAbleToGraveAsCost()
+	return c:IsCode(ID_REINE_VAACT,ID_ROI_VAACT,ID_VALET_VAACT,
+		CARD_QUEEN_KNIGHT,CARD_KING_KNIGHT,CARD_JACK_KNIGHT) and c:IsAbleToGraveAsCost()
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.costfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -47,13 +69,24 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
 	if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
-		--Change name
+		local code=e:GetLabel()
+		--Change name (code du monstre envoyé)
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_CHANGE_CODE)
 		e1:SetReset(RESETS_STANDARD_PHASE_END)
-		e1:SetValue(e:GetLabel())
+		e1:SetValue(code)
 		c:RegisterEffect(e1)
+		--Compte aussi comme l'équivalent officiel (Reine/Roi/Valet officiel)
+		local off=OFFICIEL[code]
+		if off then
+			local e2=Effect.CreateEffect(c)
+			e2:SetType(EFFECT_TYPE_SINGLE)
+			e2:SetCode(EFFECT_ADD_CODE)
+			e2:SetReset(RESETS_STANDARD_PHASE_END)
+			e2:SetValue(off)
+			c:RegisterEffect(e2)
+		end
 	end
 end
 function s.tdfilter(c)
