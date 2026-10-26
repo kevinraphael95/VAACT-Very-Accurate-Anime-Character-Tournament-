@@ -1,0 +1,104 @@
+{
+  "repos": [
+    {
+      "url": "https://github.com/Team13fr/IgnisMulti",
+      "repo_name": "Team13.fr Multilanguage updates",
+      "repo_path": "./config/languages",
+      "is_language": true,
+      "language": "",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/kevinraphael95/darksoulsygo",
+      "repo_name": "Dark souls Cartes",
+      "repo_path": "./expansions/ygodarksouls",
+      "is_language": false,
+      "language": "",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/kevinraphael95/stupid_ygo_deck",
+      "repo_name": "Test YGO Custom",
+      "repo_path": "./expansions/testygo",
+      "is_language": false,
+      "language": "",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/kevinraphael95/VAACT-Very-Accurate-Anime-Character-Tournament-",
+      "repo_name": "VAACT",
+      "repo_path": "./expansions/VAACT",
+      "is_language": false,
+      "language": "",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/kevinraphael95/vaact_patch_s3",
+      "repo_name": "VAACT Patch S3",
+      "repo_path": "./expansions/patch_s3",
+      "is_language": false,
+      "language": "",
+      "data_path": "patch_s3",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/Mazorn/VAACT-Very-Accurate-Anime-Character-Tournament-Deck",
+      "repo_name": "VAACT-Deck",
+      "repo_path": "./deck/VAACT",
+      "is_language": false,
+      "language": "",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/Mazorn/VAACT-Very-Accurate-Anime-Character-Tournament-Banlist",
+      "repo_name": "VAACT-Banlist",
+      "repo_path": "./lflists/VAACT",
+      "is_language": false,
+      "language": "",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/Mazorn/VAACT-Very-Accurate-Anime-Character-Tournament-Puzzle",
+      "repo_name": "VAACT-Puzzle",
+      "repo_path": "./puzzles/VAACT",
+      "is_language": false,
+      "language": "",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    },
+    {
+      "url": "https://github.com/kevinraphael95/VAACT-patch-fr",
+      "repo_name": "VAACT FR",
+      "repo_path": "./config/languages/Français/VAACT",
+      "is_language": true,
+      "language": "Français",
+      "data_path": "",
+      "should_update": true,
+      "should_read": true
+    }
+  ],
+  "servers": [
+    {
+      "name": "VAACT",
+      "address": "146.59.225.202",
+      "duelport": 7911,
+      "roomaddress": "146.59.225.202",
+      "roomlistprotocol": "http",
+      "roomlistport": 7922
+    }
+  ]
+}
