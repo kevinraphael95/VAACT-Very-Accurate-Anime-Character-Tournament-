@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<deck name="VAACT 04.5 - JadenM Extra">
+ <main>
+ </main>
+ <side>
+  <card id="6699" passcode="50608164">Masked HERO Koga</card>
+  <card id="16792" passcode="85672957">Masked HERO Atomic</card>
+  <card id="6696" passcode="23204029">Contrast HERO Chaos</card>
+  <card id="5099636" passcode="">Elemental HERO Core (Buff)</card>
+  <card id="4655497" passcode="">Ma&#39;at (Buff)</card>
+ </side>
+ <extra>
+  <card id="4662670" passcode="">Elemental HERO Terra Firma (Buff)</card>
+  <card id="1360" passcode="40854197">Elemental HERO Absolute Zero</card>
+  <card id="1038735" passcode="">Elemental HERO Inferno</card>
+  <card id="4662057" passcode="">Elemental HERO Great Tornado (Buff)</card>
+  <card id="4662063" passcode="">Elemental HERO Escuridao (Buff)</card>
+  <card id="4662073" passcode="">Elemental HERO The Shining (Buff)</card>
+  <card id="4662184" passcode="">Elemental HERO Gaia (Buff)</card>
+  <card id="2781" passcode="58147549">Masked HERO Goka</card>
+  <card id="2782" passcode="10920352">Masked HERO Vapor</card>
+  <card id="7419" passcode="89870349">Masked HERO Blast</card>
+  <card id="4655510" passcode="">Masked HERO Dark Law (Nerf)</card>
+  <card id="5305" passcode="29095552">Masked HERO Acid</card>
+  <card id="6698" passcode="22093873">Masked HERO Divine Wind</card>
+  <card id="7110" passcode="59642500">Masked HERO Anki</card>
+  <card id="5306" passcode="62624486">Masked HERO Dian</card>
+ </extra>
+</deck>

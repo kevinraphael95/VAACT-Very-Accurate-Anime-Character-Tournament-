@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<deck name="VAACT 04.5 - JadenM">
+ <main>
+  <card id="1397" passcode="37195861">Elemental HERO Ocean</card>
+  <card id="1417" passcode="75434695">Elemental HERO Woodsman</card>
+  <card id="1381" passcode="98266377">Elemental HERO Heat</card>
+  <card id="1385" passcode="95362816">Elemental HERO Lady Heat</card>
+  <card id="1413" passcode="09327502">Elemental HERO Voltic</card>
+  <card id="4655363" passcode="">Elemental HERO Flash (Buff)</card>
+  <card id="6692" passcode="50720316">Elemental HERO Shadow Mist</card>
+  <card id="1408" passcode="40044918">Elemental HERO Stratos</card>
+  <card id="4661865" passcode="">Elemental HERO Knospe (Buff)</card>
+  <card id="4661863" passcode="">Elemental HERO Ice Edge (Buff)</card>
+  <card id="16790" passcode="10808715">Masked HERO Dusk Crow</card>
+  <card id="5367895" passcode="">Masked HERO Furnace (Buff)</card>
+  <card id="3870346" passcode="">(Colored) Masked Hero Ray</card>
+  <card id="3870314" passcode="">(Colored) Masked Hero Gust</card>
+  <card id="3870310" passcode="">(Colored) Masked Hero Fountain</card>
+  <card id="3870290" passcode="">(Colored) Masked Hero Basoul</card>
+  <card id="4655378" passcode="">Winged Kuriboh (Manga)</card>
+  <card id="16" passcode="08949584">A Hero Lives</card>
+  <card id="5098388" passcode="">HERO&#39;s Bond (Buff)</card>
+  <card id="3533" passcode="32807846">Reinforcement of the Army</card>
+  <card id="3336" passcode="24094653">Polymerization</card>
+  <card id="3336" passcode="24094653">Polymerization</card>
+  <card id="3336" passcode="24094653">Polymerization</card>
+  <card id="2896" passcode="45906428">Miracle Fusion</card>
+  <card id="4655391" passcode="">Parallel World Fusion (Buff)</card>
+  <card id="435365" passcode="">Fusion Birth</card>
+  <card id="4655396" passcode="">Mask Change (Nerf)</card>
+  <card id="4655400" passcode="">Mask Change II (Nerf)</card>
+  <card id="4655423" passcode="">Instant Mask Change (Nerf)</card>
+  <card id="6694" passcode="84536654">Form Change</card>
+  <card id="4838041" passcode="">Construct Element (Nerf)</card>
+  <card id="4655443" passcode="">Magician&#39;s Library (Nerf)</card>
+  <card id="3346" passcode="55144522">Pot of Greed</card>
+  <card id="3043" passcode="05318639">Mystical Space Typhoon</card>
+  <card id="3367" passcode="70828912">Premature Burial</card>
+  <card id="4655452" passcode="">Legacy of a HERO (Buff)</card>
+  <card id="726008" passcode="">Hero&#39;s Return</card>
+  <card id="4655464" passcode="">HERO Solidarity (Buff)</card>
+  <card id="1903735" passcode="">Spellbook Inside the Pot</card>
+  <card id="1086313" passcode="">Duel</card>
+ </main>
+ <side>
+  <card id="4384" passcode="71564252">Thunder King Rai-Oh</card>
+  <card id="5801" passcode="05758500">Soul Release</card>
+  <card id="5149428" passcode="">Union Attack (Buff)</card>
+  <card id="4590025" passcode="">De-Fusion (Nerf)</card>
+  <card id="4271468" passcode="">Mask Function #1</card>
+  <card id="4655470" passcode="">Element Conversion (Buff)</card>
+  <card id="1218359" passcode="">Residual Reflection</card>
+  <card id="2139" passcode="22020907">Hero Signal</card>
+  <card id="1236175" passcode="">Soul Fusion</card>
+  <card id="4655474" passcode="">Element Counter (Buff)</card>
+  <card id="435643" passcode="">Emergency Bulkhead</card>
+  <card id="726463" passcode="">Higher Dimension Guard</card>
+  <card id="435397" passcode="">Power Shackle</card>
+  <card id="4655486" passcode="">Terra Firma Gravity (Buff)</card>
+  <card id="13795" passcode="66367984">Protection of the Elements</card>
+ </side>
+ <extra>
+ </extra>
+</deck>

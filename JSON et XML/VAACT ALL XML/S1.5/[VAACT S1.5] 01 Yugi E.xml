@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<deck name="VAACT 01.5 - Yugi E">
+ <main>
+  <card id="4643039" passcode="">Silent Magician LV0 (Buff)</card>
+  <card id="4643040" passcode="">Silent Swordsman LV0 (Buff)</card>
+  <card id="5816058" passcode="">Gadget Trio (Buff)</card>
+  <card id="4643043" passcode="">Gold Gadget (Buff)</card>
+  <card id="4643045" passcode="">Silver Gadget (Buff)</card>
+  <card id="5091792" passcode="">Alpha The Electromagnet Warrior</card>
+  <card id="5091798" passcode="">Beta The Electromagnet Warrior</card>
+  <card id="5091802" passcode="">Gamma The Electromagnet Warrior</card>
+  <card id="4643197" passcode="">Delta the Magnet Warrior</card>
+  <card id="12396" passcode="52566270">Epsilon The Magnet Warrior</card>
+  <card id="8162" passcode="42901635">Berserkion the Electromagna Warrior</card>
+  <card id="5816066" passcode="">Archfiend&#39;s Advent</card>
+  <card id="8067" passcode="56132807">Apple Magician Girl</card>
+  <card id="8106" passcode="34318086">Lemon Magician Girl</card>
+  <card id="8046" passcode="07198399">Chocolate Magician Girl</card>
+  <card id="8066" passcode="20747792">Berry Magician Girl</card>
+  <card id="5816043" passcode="">Dark Magician Girl the Magician&#39;s Apprentice (Buff)</card>
+  <card id="5816051" passcode="">Dark Magician the Magician of Black Magic (Buff)</card>
+  <card id="8147" passcode="71703785">Palladium Oracle Mahad</card>
+  <card id="9925" passcode="42006475">Palladium Oracle Mana</card>
+  <card id="72391" passcode="">Witch of the Black Forest</card>
+  <card id="5816064" passcode="">Moremarshmallon (Buff)</card>
+  <card id="5816070" passcode="">Gandora-G the Dragon of Destruction</card>
+  <card id="1277607" passcode="">Gandora-X the Dragon of Demolition</card>
+  <card id="4643058" passcode="">Gold Sarcophagus (Buff)</card>
+  <card id="4643068" passcode="">Ties of the Brethren (Buff)</card>
+  <card id="3346" passcode="55144522">Pot of Greed</card>
+  <card id="4944" passcode="83764718">Monster Reborn</card>
+  <card id="4158" passcode="72302403">Swords of Revealing Light</card>
+  <card id="3043" passcode="05318639">Mystical Space Typhoon</card>
+  <card id="3610325" passcode="">Magical Dimension (Buff)</card>
+  <card id="4643099" passcode="">Magnet Reverse (Buff)</card>
+  <card id="5816073" passcode="">Turn Silence (Buff)</card>
+  <card id="5816077" passcode="">Future Silence</card>
+  <card id="5816081" passcode="">Dark Magic Mirror Force</card>
+  <card id="2671" passcode="62279055">Magic Cylinder</card>
+  <card id="1998779" passcode="">Magician&#39;s Circle</card>
+  <card id="3610337" passcode="">Dark Renewal (Buff)</card>
+  <card id="5816085" passcode="">Stronghold the Hidden Fortress</card>
+  <card id="4643094" passcode="">Metalhold the Moving Blockade (Buff)</card>
+  <card id="10333" passcode="35100834">Powerhold the Moving Battery</card>
+  <card id="4643144" passcode="">Ground Erosion</card>
+  <card id="4643148" passcode="">Dimension Guardian (Nerf)</card>
+  <card id="8098" passcode="78625592">Spiritual Swords of Revealing Light</card>
+  <card id="6095391" passcode="">Time Chain</card>
+ </main>
+ <side>
+  <card id="7669" passcode="03428069">Buster Blader, the Destruction Swordmaster</card>
+  <card id="4643162" passcode="">Lord Gaia the Fierce Knight (Buff)</card>
+  <card id="7812" passcode="07241272">Curse of Dragonfire</card>
+  <card id="7963" passcode="46613515">Clear Kuriboh</card>
+  <card id="4643182" passcode="">Toy Magician (Buff)</card>
+  <card id="14947" passcode="65504487">Toy Soldier</card>
+  <card id="14948" passcode="69925461">Toy Tank</card>
+  <card id="4643173" passcode="">Toy Box (Nerf)</card>
+  <card id="2116" passcode="19613556">Heavy Storm</card>
+  <card id="5801" passcode="05758500">Soul Release</card>
+  <card id="4799063" passcode="">Aria from Beyond (Buff)</card>
+  <card id="1322444" passcode="">Mirage Spell</card>
+  <card id="8081" passcode="16832845">Final Geas</card>
+  <card id="4961134" passcode="">Magnet Force</card>
+  <card id="8073" passcode="54297661">Dimension Reflector</card>
+ </side>
+ <extra>
+  <card id="4643193" passcode="">Valkyrion the Magna Warrior (Buff)</card>
+ </extra>
+</deck>

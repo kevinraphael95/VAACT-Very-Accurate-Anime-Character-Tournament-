@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<deck name="VAACT 13.5 - Yuya Manga">
+ <main>
+  <card id="4648857" passcode="">Odd-Eyes Phantom Dragon (Buff)</card>
+  <card id="4648863" passcode="">Odd-Eyes Persona Dragon (Buff)</card>
+  <card id="4648865" passcode="">Odd-Eyes Mirage Dragon</card>
+  <card id="4649201" passcode="">Odd-Eyes Phantasma Dragon (Buff)</card>
+  <card id="9786" passcode="70335319">All-Eyes Phantom Dragon</card>
+  <card id="8935" passcode="16306932">Odd-Eyes Revolution Dragon</card>
+  <card id="12625" passcode="56677752">Performapal Odd-Eyes Butler</card>
+  <card id="12626" passcode="82661461">Performapal Odd-Eyes Valet</card>
+  <card id="4648870" passcode="">Performapal Pendulum Conductor (Buff)</card>
+  <card id="7436" passcode="40318957">Performapal Skullcrobat Joker</card>
+  <card id="4648853" passcode="">Performapal Ballad (Buff)</card>
+  <card id="4648849" passcode="">Performapal Barracuda (Buff)</card>
+  <card id="9619" passcode="30537973">Predaplant Spider Orchid</card>
+  <card id="12658" passcode="70427670">Predaplant Bufolicula</card>
+  <card id="12659" passcode="17825378">Predaplant Triantis</card>
+  <card id="4648890" passcode="">Speedroid Passinglider (Buff)</card>
+  <card id="4648887" passcode="">Speedroid Dominobutterfly (Lock-less)</card>
+  <card id="4648889" passcode="">Speedroid Marble Machine (Lock-less)</card>
+  <card id="9816" passcode="23792058">Speedroid Hexasaucer</card>
+  <card id="4648844" passcode="">Speedroid CarTurbo (Buff)</card>
+  <card id="4648836" passcode="">Performapal Uni (Buff)</card>
+  <card id="8109" passcode="33103459">Performapal Corn</card>
+  <card id="4648883" passcode="">Performapal Handsamuraiger (Buff)</card>
+  <card id="9267" passcode="08820526">Performapal Clay Breaker</card>
+  <card id="4649208" passcode="">Dragonpulse Magician (Buff)</card>
+  <card id="4649211" passcode="">Dragonpit Magician (Buff)</card>
+  <card id="4649218" passcode="">Nobledragon Magician (To Be Discarded)</card>
+  <card id="3336" passcode="24094653">Polymerization</card>
+  <card id="1164204" passcode="">Surprise Fusion</card>
+  <card id="335826" passcode="">Penetration Fusion</card>
+  <card id="8582" passcode="65646587">Pendulum Fusion</card>
+  <card id="5367921" passcode="">Dowsing Fusion (Buff)</card>
+  <card id="4649435" passcode="">Pendulum Transfer (Buff)</card>
+  <card id="10550" passcode="46005939">Pendulum Xyz</card>
+  <card id="1209762" passcode="">Pendulum Halt</card>
+  <card id="1217360" passcode="">Pendulum Boost</card>
+  <card id="3235310" passcode="">Dual-Colored Eyes</card>
+  <card id="3043" passcode="05318639">Mystical Space Typhoon</card>
+  <card id="7835" passcode="98827725">The Phantom Knights of Shade Brigandine</card>
+  <card id="7835" passcode="98827725">The Phantom Knights of Shade Brigandine</card>
+ </main>
+ <side>
+  <card id="12627" passcode="19050066">Performapal Barokuriboh</card>
+  <card id="12628" passcode="55554175">Performapal Classikuriboh</card>
+  <card id="9817" passcode="69181753">Performapal Kuribohble</card>
+  <card id="10360" passcode="28427869">Smoke Mosquito</card>
+  <card id="4648843" passcode="">Performapal Miss Director (Nerf)</card>
+  <card id="4649444" passcode="">Performapal Turn Trooper (Buff)</card>
+  <card id="15985" passcode="65155517">Speedroid Colonel Clackers</card>
+  <card id="15985" passcode="65155517">Speedroid Colonel Clackers</card>
+  <card id="15985" passcode="65155517">Speedroid Colonel Clackers</card>
+  <card id="295" passcode="19578592">Axe of Fools</card>
+  <card id="2903968" passcode="">Trick Barrier</card>
+  <card id="1217393" passcode="">Trick Explanation</card>
+  <card id="648146" passcode="">Sonic Cyclone</card>
+  <card id="4649506" passcode="">The Phantom Knights of Dark Gauntlets (Buff)</card>
+  <card id="7837" passcode="51606429">The Phantom Knights of Tomb Shield</card>
+ </side>
+ <extra>
+  <card id="12023" passcode="93729065">Starving Venemy Dragon</card>
+  <card id="4648895" passcode="">Starving Venemy Lethal Dose Dragon (Buff)</card>
+  <card id="4648893" passcode="">Predaplant Chimerafflesia (Buff)</card>
+  <card id="8275" passcode="65029288">Performapal Odd-Eyes Metal Claw</card>
+  <card id="4648878" passcode="">Clear Wing Fast Dragon (Buff)</card>
+  <card id="7097" passcode="97007933">Hi-Speedroid Kendama</card>
+  <card id="7700" passcode="21516908">Hi-Speedroid Hagoita</card>
+  <card id="7575" passcode="42110604">Hi-Speedroid Chanbara</card>
+  <card id="7902" passcode="86943389">Hi-Speedroid Puzzle</card>
+  <card id="9909" passcode="05772618">Hi-Speedroid Kitedrake</card>
+  <card id="9818" passcode="95685352">Dark Anthelion Dragon</card>
+  <card id="6786" passcode="16195942">Dark Rebellion Xyz Dragon</card>
+  <card id="4649493" passcode="">The Phantom Knights of Break Sword</card>
+ </extra>
+</deck>

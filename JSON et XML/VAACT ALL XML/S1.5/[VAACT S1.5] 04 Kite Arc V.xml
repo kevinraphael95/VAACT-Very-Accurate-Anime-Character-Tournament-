@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<deck name="VAACT 11.5 - Kite Arc V">
+ <main>
+  <card id="8134" passcode="81974607">Cipher Wing</card>
+  <card id="8134" passcode="81974607">Cipher Wing</card>
+  <card id="8134" passcode="81974607">Cipher Wing</card>
+  <card id="4652863" passcode="">Cipher Twin Raptor (Lock-less)</card>
+  <card id="4652863" passcode="">Cipher Twin Raptor (Lock-less)</card>
+  <card id="4652863" passcode="">Cipher Twin Raptor (Lock-less)</card>
+  <card id="8190" passcode="58383100">Cipher Mirror Knight</card>
+  <card id="8190" passcode="58383100">Cipher Mirror Knight</card>
+  <card id="8190" passcode="58383100">Cipher Mirror Knight</card>
+  <card id="8327" passcode="79094383">Cipher Etranger</card>
+  <card id="12027" passcode="29092121">Cipher Biplane</card>
+  <card id="12027" passcode="29092121">Cipher Biplane</card>
+  <card id="9090" passcode="89571015">Storm Cipher</card>
+  <card id="9090" passcode="89571015">Storm Cipher</card>
+  <card id="12028" passcode="55496220">Cipher Interference</card>
+  <card id="4649807" passcode="">Double Exposure (Buff)</card>
+  <card id="8372" passcode="47882565">Rank-Up-Magic Cipher Ascension</card>
+  <card id="928138" passcode="">Rank-Up Magic Cipher Pursuit</card>
+  <card id="928141" passcode="">Rank-Up Magic Cipher Shock</card>
+  <card id="928120" passcode="">Cipher Diffusion</card>
+  <card id="2181854" passcode="">Galaxy-Eyes Nova</card>
+  <card id="4512495" passcode="">Attack Reversal</card>
+  <card id="7718" passcode="43898403">Twin Twisters</card>
+  <card id="7718" passcode="43898403">Twin Twisters</card>
+  <card id="1253310" passcode="">Cipher Deterrent</card>
+ </main>
+ <side>
+  <card id="2429" passcode="79853073">Cipher Soldier</card>
+  <card id="2429" passcode="79853073">Cipher Soldier</card>
+  <card id="928146" passcode="">Rank-Up Magic Limitover Force</card>
+  <card id="4649821" passcode="">Double Cipher (Buff)</card>
+  <card id="8385" passcode="0098905">Cipher Spectrum</card>
+  <card id="8248" passcode="99397762">Cipher Bit</card>
+  <card id="4649827" passcode="">Cipher Shield</card>
+  <card id="4649835" passcode="">Split Guard</card>
+  <card id="4669387" passcode="">Rank-Up Gravity</card>
+ </side>
+ <extra>
+  <card id="8135" passcode="18963306">Galaxy-Eyes Cipher Dragon</card>
+  <card id="8135" passcode="18963306">Galaxy-Eyes Cipher Dragon</card>
+  <card id="8135" passcode="18963306">Galaxy-Eyes Cipher Dragon</card>
+  <card id="8365" passcode="12632096">Neo Galaxy-Eyes Cipher Dragon</card>
+  <card id="8365" passcode="12632096">Neo Galaxy-Eyes Cipher Dragon</card>
+  <card id="8263" passcode="02530830">Galaxy-Eyes Cipher Blade Dragon</card>
+ </extra>
+</deck>
