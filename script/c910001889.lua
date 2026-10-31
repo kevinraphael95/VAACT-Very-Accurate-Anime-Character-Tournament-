@@ -1,0 +1,43 @@
+--ラプターズ・ストーム
+--Raptor's Storm
+local s,id=GetID()
+function s.initial_effect(c)
+	-- === AJOUT AUTO : considérée comme la carte officielle (ID 511001346) ===
+	local e_add_code = Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(511001346)
+	c:RegisterEffect(e_add_code)
+	-- =====================================================================
+	--activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_CHAINING)
+	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
+	e1:SetCondition(s.condition)
+	e1:SetTarget(s.target)
+	e1:SetOperation(s.activate)
+	c:RegisterEffect(e1)
+end
+s.listed_series={0xba}
+function s.cfilter(c)
+	return c:IsFaceup() and c:IsSetCard(SET_RAIDRAPTOR)
+end
+function s.condition(e,tp,eg,ep,ev,re,r,rp)
+	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and Duel.IsChainNegatable(ev) and rp~=tp 
+		and Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,1,nil)
+end
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	if re:GetHandler():IsRelateToEffect(re) and re:GetHandler():IsDestructable() then
+		Duel.SetOperationInfo(0,CATEGORY_DESTROY,re:GetHandler(),1,0,0)
+	end
+end
+function s.activate(e,tp,eg,ep,ev,re,r,rp)
+	Duel.NegateActivation(ev)
+	if re:GetHandler():IsRelateToEffect(re) then
+		Duel.Destroy(re:GetHandler(),REASON_EFFECT)
+	end
+end

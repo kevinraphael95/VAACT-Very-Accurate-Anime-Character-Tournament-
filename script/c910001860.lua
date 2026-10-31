@@ -1,0 +1,40 @@
+--Abyss Actor's Vacancy
+--fixed by MLD
+local s,id=GetID()
+function s.initial_effect(c)
+	-- === AJOUT AUTO : considérée comme la carte officielle (ID 511008503) ===
+	local e_add_code = Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(511008503)
+	c:RegisterEffect(e_add_code)
+	-- =====================================================================
+	--
+	aux.AddPersistentProcedure(c,nil,Card.IsFaceup)
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_CANNOT_BE_XYZ_MATERIAL)
+	e2:SetRange(LOCATION_SZONE)
+	e2:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e2:SetTarget(s.tg)
+	e2:SetLabelObject(e1)
+	e2:SetValue(1)
+	c:RegisterEffect(e2)
+	local e3=e2:Clone()
+	e3:SetCode(EFFECT_CANNOT_BE_SYNCHRO_MATERIAL)
+	c:RegisterEffect(e3)
+	local e4=e2:Clone()
+	e4:SetCode(EFFECT_CANNOT_BE_FUSION_MATERIAL)
+	c:RegisterEffect(e4)
+	local e5=e2:Clone()
+	e5:SetCode(EFFECT_UNRELEASABLE_SUM)
+	c:RegisterEffect(e5)
+	local e6=e2:Clone()
+	e6:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
+	c:RegisterEffect(e6)
+end
+function s.tg(e,c)
+	local tc=e:GetHandler():GetCardTarget():GetFirst()
+	return tc and c:IsLevel(tc:GetLevel())
+end

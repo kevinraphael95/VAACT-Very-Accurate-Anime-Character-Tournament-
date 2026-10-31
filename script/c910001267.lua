@@ -1,0 +1,39 @@
+--デュエル
+--Duel
+local s,id=GetID()
+function s.initial_effect(c)
+	-- === AJOUT AUTO : considérée comme la carte officielle (ID 511018008) ===
+	local e_add_code = Effect.CreateEffect(c)
+	e_add_code:SetType(EFFECT_TYPE_SINGLE)
+	e_add_code:SetCode(EFFECT_ADD_CODE)
+	e_add_code:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e_add_code:SetValue(511018008)
+	c:RegisterEffect(e_add_code)
+	-- =====================================================================
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_DRAW)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetTarget(s.target)
+	e1:SetOperation(s.operation)
+	c:RegisterEffect(e1)
+end
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	local ct1=6-Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)
+	local ct2=6-Duel.GetFieldGroupCount(1-tp,LOCATION_HAND,0)
+	if chk==0 then return ct1>0 and Duel.IsPlayerCanDraw(tp,ct1)
+		and ct2>0 and Duel.IsPlayerCanDraw(1-tp,ct2) end
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,ct1)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,1-tp,ct2)
+end
+function s.operation(e,tp,eg,ep,ev,re,r,rp)
+	local ht1=Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)
+	local ht2=Duel.GetFieldGroupCount(1-tp,LOCATION_HAND,0)
+	if ht1<6 then 
+		Duel.Draw(tp,6-ht1,REASON_EFFECT)
+	end
+	if ht2<6 then 
+		Duel.Draw(1-tp,6-ht2,REASON_EFFECT)
+	end
+end
