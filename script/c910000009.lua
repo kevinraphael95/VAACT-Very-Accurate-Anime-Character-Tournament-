@@ -108,25 +108,28 @@ function s.atktg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsRelateToEffect(e) end
 	Duel.SetTargetCard(eg:Filter(s.atkfilter,nil,tp))
 end
+
 function s.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetTargetCards(e):Match(Card.IsFaceup,nil)
 	if #g==0 then return end
 	local dg=Group.CreateGroup()
 	local c=e:GetHandler()
 	for tc in g:Iter() do
-		local preatk=tc:GetAttack()
+		local preatk=tc:GetAttack() -- Sauvegarde de l'ATK avant réduction
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
 		e1:SetValue(-2000)
 		e1:SetReset(RESET_EVENT|RESETS_STANDARD)
 		tc:RegisterEffect(e1)
-		if preatk~=0 and tc:GetAttack()==0 then dg:AddCard(tc) end
+		-- Vérifie si le monstre était déjà à 0 ATK ou moins avant l'effet
+		if preatk<=2000 then dg:AddCard(tc) end
 	end
 	if #dg==0 then return end
 	Duel.BreakEffect()
 	Duel.Destroy(dg,REASON_EFFECT)
 end
+
 function s.tgcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSpecialSummoned()
 end
